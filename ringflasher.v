@@ -10,12 +10,12 @@ module ring_flasher #(
 localparam IDLE = 1'b0;
 localparam RUN  = 1'b1;
 
-localparam DIR_CW  = 1'b0;
-localparam DIR_CCW = 1'b1;
+localparam DIR_CW  = 1'b0;  //clockwise
+localparam DIR_CCW = 1'b1;  //anti clockwise
 
-localparam ACT_SET    = 2'b00;
-localparam ACT_CLEAR  = 2'b01;
-localparam ACT_TOGGLE = 2'b10;
+localparam ACT_SET    = 2'b00;  //turn on
+localparam ACT_CLEAR  = 2'b01;  //turn off
+localparam ACT_TOGGLE = 2'b10;  //flip the current LED
 
 localparam integer DIV_W = (STEP_DIV <= 1) ? 1 : $clog2(STEP_DIV);
 
@@ -34,10 +34,10 @@ reg step_tick;
 always @(*) begin
     led_next = led;
 
-    case (action_mode)
-        ACT_SET:    led_next[pos] = 1'b1;
-        ACT_CLEAR:  led_next[pos] = 1'b0;
-        ACT_TOGGLE: led_next[pos] = ~led[pos];
+    case (action_mode) //3 states for each direction: set, clear, toggle
+        ACT_SET:    led_next[pos] = 1'b1;  //turn on
+        ACT_CLEAR:  led_next[pos] = 1'b0;  //turn off
+        ACT_TOGGLE: led_next[pos] = ~led[pos];  //flip the current LED
         default:    led_next[pos] = led[pos];
     endcase
 end
@@ -50,7 +50,7 @@ always @(*) begin
     else
         step_tick = (state == RUN) && (div_cnt == STEP_DIV - 1);
 end
-
+//initialize 1st state
 always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
         led         <= 16'b0;
@@ -84,7 +84,7 @@ always @(posedge clk or negedge rst_n) begin
     end else begin
         if (step_tick) begin
             div_cnt <= {DIV_W{1'b0}};
-
+//phase transition logic
             if (steps_left == 4'd1) begin
                 if ((led_next == 16'b0) && (dir == DIR_CCW)) begin
                     if (repeat_en) begin
