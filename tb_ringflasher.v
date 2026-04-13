@@ -1,17 +1,4 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company:
-// Engineer:
-//
-// Create Date: 02/26/2025 10:00:00 AM
-// Module Name: tb_ringflasher
-// Description:
-//  Testbench for ring_flasher module with parameterized delays.
-// Revision:
-// Revision 0.01 - File Created
-// Revision 1.00 - Adapted to current ring_flasher interface
-//////////////////////////////////////////////////////////////////////////////////
-
+`timescale 1ns / 1p
 module tb_ringflasher;
 
     //------------------------------------------
